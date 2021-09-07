@@ -62,10 +62,10 @@ public class TrashActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long uid) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(setContext());
-                builder.setTitle("삭제 확인");
-                builder.setMessage("삭제하시겠습니까?");
+                builder.setMessage("영구삭제 하시겠습니까?\n원래 앨범으로 복구하시겠습니까?");
 
-                builder.setNegativeButton("예", new DialogInterface.OnClickListener() {
+
+                builder.setNegativeButton("영구 삭제", new DialogInterface.OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which) {
                         database.execSQL("DELETE FROM trash WHERE num="+uid);
                         Toast.makeText(getApplicationContext(), uid+"번째 아이템이 삭제되었습니다", Toast.LENGTH_SHORT).show();
@@ -74,9 +74,11 @@ public class TrashActivity extends AppCompatActivity {
                     }
                 });
 
-                builder.setPositiveButton("아니오", new DialogInterface.OnClickListener() {
+                builder.setPositiveButton("복구", new DialogInterface.OnClickListener() {
                     @Override public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(), "삭제 취소됨", Toast.LENGTH_SHORT).show();
+                        helper.InsertAlbum(uid);
+                        displayList();
+                        Toast.makeText(getApplicationContext(), "앨범으로 복구되었습니다!", Toast.LENGTH_SHORT).show();
                     }
                 });
                 builder.show();

@@ -48,6 +48,21 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(qry);
         db.close();
     }
+    public void InsertAlbum(long uid){
+        SQLiteDatabase db=getReadableDatabase();
+        String tag="",url="",date="";
+        Cursor cursor=db.rawQuery("SELECT * FROM trash WHERE num="+uid,null);
+        if (cursor.moveToNext()){
+            tag=cursor.getString(1);
+            url=cursor.getString(3);
+            date=cursor.getString(2);
+        }
+        String qry="INSERT INTO album(tag,uri,date) VALUES('"+tag+"','"+url+"','"+date+"')";
+        db.execSQL(qry);
+
+        db.execSQL("DELETE FROM trash WHERE num="+uid);
+        db.close();
+    }
 
     public void InsertTrash(long uid){
         SQLiteDatabase db=getReadableDatabase();
